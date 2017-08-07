@@ -1,6 +1,6 @@
 В данной статье мне бы хотелось напомнить о проблеме дублирования кода. Несмотря на то, что проблемы, связанные с дублированием кода, упоминаются довольно часто, актуальность этих проблем из года в год остается почти неизменной. Во многих популярных проектах количество клонов измеряется сотнями или даже тысячами. В рамках данной статьи мы рассмотрим, что такое клоны, какие они влекут за собой проблемы и как с ними можно бороться. В статье приводятся примеры рефакторинга реальных клонов из популярного фреймворка Spring. В качестве инструментов используются **Java 8**,  IDE **IntelliJ IDEA** 2017.1 и плагин **Duplicate Detector** 1.1.
 
-![](imgs/clone_count.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/clone_count.png)
 
 ### Откуда берутся клоны?
 
@@ -21,7 +21,7 @@
 С другой стороны, удаление дубликатов также может привести к ошибкам, особенно, если для этого необходимо вносить существенные изменения в текст программы. Однако главным аргументом против удаления клонов является то, что такое удаление часто приводит к увеличению числа зависимостей. Довольно интересно про это написано в статье "[Redundancy vs dependencies: which is worse?](http://yosefk.com/blog/redundancy-vs-dependencies-which-is-worse.html)".
 
 * * *
-![](imgs/tobeornot.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/tobeornot.png)
 * * *
 
 <!-- Оставить -->
@@ -49,7 +49,7 @@
 
 Данная статья преследует две цели. С одной стороны, с ее помощью мне бы хотелось внести свой скромный вклад в борьбу с дублированием исходного кода. С другой стороны, я бы хотел познакомить читателя с плагином [Duplicate Detector](http://suhininalex.github.io/IdeaClonePlugin/), разработчиком которого я и являюсь. На данный момент, по сравнению со стандартными инспекциями, этот плагин обнаруживает в 3-4 раза больше клонов, предоставляет более удобный интерфейс и доступен для некоммерческой версии IntelliJ IDEA.
 
-Основные возможности плагина Duplicate Detector
+Основные возможности плагина Duplicate Detector:
 
 - Анализ кода на лету (во время редактирования)
 - Анализ проектов промышленного масштаба (с миллионами строк кода)
@@ -79,29 +79,29 @@
 <details>
   <summary>Показать панель сравнения дубликатов</summary>
 
-![](imgs/other_duplicates.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/other_duplicates.png)
 
-![](imgs/Aspect_diff.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/Aspect_diff.png)
 </details>
 
 <details>
   <summary>Обобщить фрагмент в виде метода</summary>
 
-![](imgs/extract.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/extract.png)
 </details>
 
 <details>
   <summary>Подставить тип возвращаемого значения</summary>
 
-![](imgs/intension.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/intension.png)
 </details>
 
 #### Пример 1. Начнем с очевидного.
 
-![](imgs/Aspect_1.png)
-![](imgs/Aspect_2.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/Aspect_1.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/Aspect_2.png)
 
-![](imgs/Aspect_diff.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/Aspect_diff.png)
 
 В данном примере фрагменты кода почти идентичны. Главные отличия касаются только строк ``4`` и ``9``, в которых изменяются значения полей. В таких случаях на практике мало что можно сделать. Как вариант, можно попробовать выделить функциональные интерфейсы и использовать лямбды. Однако при таком рефакторинге код не обязательно станет короче, а главное, понятнее.
 
@@ -179,9 +179,9 @@ protected void setThrowingNameNoCheck(String name) {
 
 #### Пример 2. Проблема с интерфейсами.
 
-![](imgs/parse.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/parse.png)
 
-![](imgs/parse_diff.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/parse_diff.png)
 
 Рассмотрим более неоднозначный пример. На первый взгляд кажется, что код в нем является практически идентичным. Однако на самом деле методы ``setSource()``, ``setElementTypeName()``, ``setMergeEnabled()`` не являются частью общего интерфейса или класса. Конечно, можно создать новый интерфейс или расширить уже имеющийся. Но этого может быть недостаточно, если у Вас нет доступа к классам ``ManagedList`` и ``ManagedSet``, чтобы связать их с этим интерфейсом. В этом случае, Вам также придется создавать собственные wrapper'ы этих классов.
 
@@ -242,9 +242,9 @@ public Set<Object> parseSetElement(Element collectionEle, @Nullable BeanDefiniti
 
 #### Пример 3. Ошибка при копировании.
 
-![](imgs/error_2.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/error_2.png)
 
-![](imgs/error_1.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/error_1.png)
 
 Обратите внимание на последние части, связанные с переменной ``user``. Несмотря на их небольшое отличие, они также относятся к клонам. Такое может происходить по нескольким причинам. Например, если один фрагмент сначала скопировали, а уже затем изменили (исправили ошибку). Или, например, если фрагменты разрабатывались отдельно, различие в них может быть связано с невнимательностью или незнанием одного из разработчиков.
 
@@ -296,10 +296,10 @@ public String getDescription(boolean includeClientInfo) {
 
 #### Пример 4. Наследование.
 
-![](imgs/superclass_1.png)
-![](imgs/superclass_2.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/superclass_1.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/superclass_2.png)
 
-![](imgs/superclass_diff.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/superclass_diff.png)
 
 В этом примере клонами являются конструкторы. Дублирование конструкторов часто происходит, если клоны на самом деле - это целые классы. В подобных случаях обычно или создают новый общий суперкласс, или пробуют выразить один из существующих классов через другой.
 
@@ -330,13 +330,13 @@ public String getDescription(boolean includeClientInfo) {
 
 #### Пример 5. Использование лямбда выражений.
 
-![](imgs/lambda_1.png)
-![](imgs/lambda_2.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/lambda_1.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/lambda_2.png)
 
 <details>
   <summary>Сравнение дубликатов</summary>
 
-![](imgs/lambda_diff.png)
+![](https://raw.githubusercontent.com/suhininalex/Habr/master/imgs/lambda_diff.png)
 </details>
 
 Иногда различия между клонами могут касаться конструкторов, методов или целых фрагментов кода. В этом случае обобщение можно сделать с помощью функциональных интерфейсов:  [``Function``](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html), [``BiFunction``](https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html), [``Comparator``](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html), [``Supplier``](https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html), [``Consumer``](https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html) или других. Единственное ограничение заключается в том, что в параметризуемых фрагментах должны совпадать типы входных и выходных данных.
